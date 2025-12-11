@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ワードクラウド生成アプリ</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Kuromoji.jsとwordcloud2.jsをCDNから読み込み -->
+  <script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dist/kuromoji.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/wordcloud2.js@1.2.0/dist/wordcloud2.min.js"></script>
+</head>
+<body>
+  <h1>ワードクラウド生成アプリ</h1>
+  <div class="container">
+    <!-- 左カラム：設定エリア -->
+    <div class="left-column">
+      <!-- テキスト入力エリア -->
+      <div class="input-section">
+        <h2>テキスト入力</h2>
+        <textarea id="text-input" rows="10" placeholder="文章を貼り付けるか、ファイルをアップロードしてください。"></textarea>
+        <label class="file-upload">
+          <input type="file" id="file-input" accept=".txt">
+          ファイルを選択
+        </label>
+      </div>
+
+      <!-- ストップワード入力エリア -->
+      <div class="stopwords-section">
+        <h2>除外単語</h2>
+        <textarea id="stopwords-input" rows="5" placeholder="カンマまたは改行区切りで入力"></textarea>
+        <label>
+          <input type="checkbox" id="auto-stopwords"> よくある助詞を自動除外
+        </label>
+      </div>
+
+      <!-- カスタマイズ設定エリア -->
+      <div class="customize-section">
+        <h2>カスタマイズ</h2>
+
+        <!-- プリセット設定 -->
+        <div class="setting">
+          <label>プリセット：</label>
+          <select id="preset-select">
+            <option value="">カスタム</option>
+            <option value="default">標準</option>
+            <option value="presentation">プレゼン用</option>
+            <option value="minimal">シンプル</option>
+          </select>
+          <button id="save-preset-btn">現在の設定を保存</button>
+          <input type="text" id="preset-name" placeholder="プリセット名" style="display: none;">
+        </div>
+
+        <!-- 文字サイズ設定 -->
+        <div class="setting">
+          <label>文字の大きさ：<span id="font-size-value">5</span></label>
+          <input type="range" id="font-size" min="1" max="10" value="5">
+        </div>
+
+        <!-- 色テーマ設定 -->
+        <div class="setting">
+          <label>色テーマ：</label>
+          <select id="color-theme">
+            <option value="monochrome">黒基調</option>
+            <option value="pastel">パステル</option>
+            <option value="colorful">カラフル</option>
+            <option value="random-dark">ランダムダーク</option>
+            <option value="random-light">ランダムライト</option>
+            <option value="custom">カスタム</option>
+          </select>
+          <input type="color" id="custom-color" style="display: none;" value="#ff0000">
+        </div>
+
+        <!-- 抽出単語数設定 -->
+        <div class="setting">
+          <label>抽出単語数（トップN）：</label>
+          <input type="number" id="top-n" min="10" max="200" value="50">
+        </div>
+
+        <!-- 画像サイズ設定 -->
+        <div class="setting">
+          <label>画像サイズ：</label>
+          <input type="number" id="canvas-width" placeholder="幅" value="800"> ×
+          <input type="number" id="canvas-height" placeholder="高さ" value="600"> px
+        </div>
+      </div>
+
+      <!-- 生成ボタン -->
+      <button id="generate-btn">ワードクラウドを生成</button>
+    </div>
+
+    <!-- 右カラム：プレビューエリア -->
+    <div class="right-column">
+      <canvas id="wordcloud-canvas"></canvas>
+      <button id="download-btn">PNGでダウンロード</button>
+    </div>
+  </div>
+
+  <!-- JavaScriptファイル読み込み -->
+  <script src="script.js"></script>
+</body>
+</html>
